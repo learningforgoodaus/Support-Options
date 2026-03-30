@@ -69,6 +69,7 @@
             text-align: center;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
             box-sizing: border-box;
+            transition: all 0.5s ease;
         }
 
         .large-circle h2 {
@@ -80,8 +81,8 @@
 
         .small-circle {
             position: absolute;
-            width: 105px;
-            height: 105px;
+            width: 110px;
+            height: 110px;
             background-color: var(--color-primary-purple);
             color: white;
             border-radius: 50%;
@@ -95,15 +96,16 @@
             font-size: 0.85rem;
             font-weight: 600;
             line-height: 1.2;
-            padding: 10px;
+            padding: 12px;
             box-sizing: border-box;
             pointer-events: auto;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
         .small-circle.active {
             background-color: var(--color-accent-purple);
-            width: 125px;
-            height: 125px;
+            width: 130px;
+            height: 130px;
             border: 4px solid var(--color-dark-purple);
         }
 
@@ -116,31 +118,37 @@
             pointer-events: none;
         }
 
-        /* --- MOBILE FIX --- */
+        /* --- MOBILE REFINEMENTS --- */
         @media (max-width: 850px) {
             .learning-activity-container {
-                width: 95vw;
-                height: 90vh;
-                min-height: 600px;
+                width: 96vw;
+                height: 85vh;
+                min-height: 580px;
+                border-radius: 1.5rem;
             }
             .large-circle {
-                width: 290px;
-                height: 290px;
-                padding: 30px;
+                width: 280px;
+                height: 280px;
+                padding: 25px;
             }
             .large-circle h2 { font-size: 1.1rem; }
-            .large-circle p { font-size: 0.85rem; }
+            .large-circle p { font-size: 0.8rem; line-height: 1.4; }
 
             .small-circle {
-                width: 90px !important;
-                height: 90px !important;
+                width: 95px !important;
+                height: 95px !important;
                 font-size: 0.75rem;
+                padding: 8px;
             }
             .small-circle.active {
-                width: 105px !important;
-                height: 105px !important;
+                width: 110px !important;
+                height: 110px !important;
             }
-            .top-instructions { font-size: 0.9rem; top: 20px; }
+            .top-instructions { 
+                font-size: 0.85rem; 
+                top: 15px; 
+                line-height: 1.2;
+            }
         }
     </style>
 </head>
@@ -185,14 +193,17 @@
             const isActive = section.id === activeCircleId;
             const smallR = el.offsetWidth / 2;
 
-            // CRITICAL FIX: On mobile, we reduce the orbit so they don't fall off the screen
-            const orbit = isMobile ? (largeR + smallR + 10) : (largeR + smallR + 40);
+            // MATHEMATICAL FIX: 
+            // On mobile, we significantly reduce orbit padding so the "arc" stays inside the 96vw width.
+            const orbitPadding = isMobile ? 12 : 45;
+            const orbit = largeR + smallR + orbitPadding;
 
             let angle;
-            const STEP = isMobile ? 45 : 35;
-            const RIGHT_START = isMobile ? 35 : 45; // Pulling them slightly inward for mobile
+            const STEP = isMobile ? 50 : 38; // Wider spread on mobile for easier tapping
+            const RIGHT_START = isMobile ? 30 : 45; 
             const LEFT_START = 135;
 
+            // Logic to keep them on one side or the other based on selection
             if (activeCircleId === null) {
                 angle = RIGHT_START - (index * STEP);
             } else if (index <= activeIndex) {
@@ -203,6 +214,8 @@
             }
 
             const rad = angle * (Math.PI / 180);
+            
+            // Positioning via Left/Top for better stability in LMS iframes
             const x = centerX + orbit * Math.cos(rad) - smallR;
             const y = centerY - orbit * Math.sin(rad) - smallR;
 
@@ -214,6 +227,7 @@
         });
     }
 
+    // Build circles once
     sectionsData.forEach(s => {
         const div = document.createElement('div');
         div.id = `circle-${s.id}`;
@@ -228,7 +242,8 @@
         wrapper.appendChild(div);
     });
 
-    window.onload = () => setTimeout(renderCircles, 100);
+    // Handle Xen/LMS loading delay
+    window.onload = () => setTimeout(renderCircles, 150);
     window.onresize = renderCircles;
 </script>
 
