@@ -1,48 +1,194 @@
-.small-circle {
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internal Support - Workplace Safety</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --color-bg-purple: #C6B4D9;
+            --color-primary-purple: #513873;
+            --color-dark-purple: #413659;
+            --color-light-grey: #f6f5f8; 
+            --color-white: #FFFFFF;
+        }
+
+        body {
+            font-family: 'Helvetica', 'Arial', sans-serif;
+            background-color: var(--color-light-grey);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        .learning-activity-container {
+            position: relative;
+            width: 800px; 
+            height: 600px;
+            background-color: var(--color-bg-purple);
+            border-radius: 2rem;
+            box-shadow: 0 15px 35px rgba(65, 54, 89, 0.25);
+            overflow: hidden;
+        }
+
+        .top-instructions {
             position: absolute;
-            width: 100px;
-            height: 100px;
+            top: 25px;
+            width: 100%;
+            text-align: center;
+            color: var(--color-primary-purple);
+            font-weight: 700;
+            font-size: 1.1rem;
+            z-index: 20;
+            padding: 0 15px;
+        }
+
+        .large-circle {
+            width: 400px;
+            height: 400px;
+            background-color: var(--color-white);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 45px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .small-circle {
+            position: absolute;
+            width: 110px;
+            height: 110px;
             background-color: var(--color-primary-purple);
-            color: var(--color-white);
+            color: white;
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
             text-align: center;
             cursor: pointer;
-            pointer-events: auto;
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            
-            /* Text Fitting Fixes */
+            z-index: 10;
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
             font-size: 0.85rem;
             font-weight: 600;
-            padding: 12px; /* Inner padding to keep text off the edges */
+            line-height: 1.2;
+            padding: 10px;
             box-sizing: border-box;
-            line-height: 1.1;
-            word-wrap: break-word;
-            hyphens: auto;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
         }
 
-        /* --- MOBILE TEXT FITTING --- */
-        @media (max-width: 850px) {
+        .small-circle.active {
+            background-color: var(--color-dark-purple);
+            width: 130px;
+            height: 130px;
+            box-shadow: 0 12px 24px rgba(0,0,0,0.3);
+            border: 3px solid white;
+        }
+
+        /* --- MOBILE REWRITE --- */
+        @media (max-width: 768px) {
             .learning-activity-container {
-                width: 98vw;
+                width: 95vw;
                 height: 90vh;
+                min-height: 550px;
             }
-            .small-circle {
-                width: 90px; /* Fixed minimum size so text actually fits */
-                height: 90px;
-                font-size: 0.7rem; /* Smaller font for mobile */
-                padding: 10px;
-            }
-            .small-circle.active {
-                width: 105px;
-                height: 105px;
-                font-size: 0.75rem;
-            }
+
             .large-circle {
-                width: 60vw;
-                height: 60vw;
+                width: 280px;
+                height: 280px;
+                padding: 30px;
+            }
+
+            .large-circle h2 { font-size: 1.1rem !important; }
+            .large-circle p { font-size: 0.85rem !important; }
+
+            .small-circle {
+                width: 85px !important; /* Force the size */
+                height: 85px !important;
+                font-size: 0.7rem !important;
+                padding: 5px !important;
+            }
+
+            .small-circle.active {
+                width: 100px !important;
+                height: 100px !important;
             }
         }
+    </style>
+</head>
+<body>
+
+<div class="learning-activity-container">
+    <div class="top-instructions">Select a circle to explore support</div>
+    <div id="large-circle" class="large-circle">
+        <h2 id="title" class="text-xl font-bold mb-2 text-[var(--color-primary-purple)]">Internal Support</h2>
+        <p id="text" class="text-gray-700">Explore how your workplace can help colleagues stay safe.</p>
+    </div>
+    <div id="wrapper"></div>
+</div>
+
+<script>
+    const data = [
+        { id: 'm', title: 'Managers', content: 'Managers can arrange shift changes and secure priority parking for safety.' },
+        { id: 'h', title: 'HR Support', content: 'HR can facilitate the 10 days of paid domestic violence leave available to all Australians.' },
+        { id: 'e', title: 'EAP', content: 'The Employee Assistance Program offers free, private professional counselling.' }
+    ];
+
+    const wrapper = document.getElementById('wrapper');
+    const titleEl = document.getElementById('title');
+    const textEl = document.getElementById('text');
+    let activeId = null;
+
+    function positionCircles() {
+        const container = document.querySelector('.learning-activity-container');
+        const isMobile = window.innerWidth <= 768;
+        const centerX = container.offsetWidth / 2;
+        const centerY = container.offsetHeight / 2;
+        
+        // Dynamic math based on actual element size
+        const largeR = document.getElementById('large-circle').offsetWidth / 2;
+        const padding = isMobile ? 15 : 35;
+
+        data.forEach((item, index) => {
+            const el = document.getElementById(item.id);
+            const smallR = el.offsetWidth / 2;
+            const orbit = largeR + smallR + padding;
+            
+            // Adjust angles for mobile so they don't hit the left/right wall
+            let angle;
+            if (isMobile) {
+                const mobileAngles = [70, 180, 290]; // Spread vertically
+                angle = mobileAngles[index];
+            } else {
+                angle = 45 - (index * 40); // Original desktop arc
+            }
+
+            const rad = angle * (Math.PI / 180);
+            const x = centerX + orbit * Math.cos(rad) - smallR;
+            const y = centerY - orbit * Math.sin(rad) - smallR;
+
+            el.style.left = `${x}px`;
+            el.style.top = `${y}px`;
+        });
+    }
+
+    // Initialize
+    data.forEach(item => {
+        const div = document.createElement('div');
+        div.id = item.id;
+        div.className = 'small-circle';
+        div.innerHTML = `<span>${item.title}</span>`;
+        div.onclick = () => {
+            activeId = item.id;
