@@ -29,7 +29,7 @@
         .learning-activity-container {
             position: relative;
             width: 800px; 
-            height: 650px;
+            height: 600px;
             background-color: var(--color-bg-purple);
             border-radius: 2rem;
             box-shadow: 0 15px 35px rgba(65, 54, 89, 0.25);
@@ -45,19 +45,19 @@
             font-weight: 700;
             font-size: 1.1rem;
             z-index: 20;
-            padding: 0 20px;
+            padding: 0 15px;
         }
 
         .large-circle {
-            width: 420px;
-            height: 420px;
+            width: 400px;
+            height: 400px;
             background-color: var(--color-white);
             border-radius: 50%;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 50px;
+            padding: 45px;
             position: absolute;
             top: 50%;
             left: 50%;
@@ -69,8 +69,8 @@
 
         .small-circle {
             position: absolute;
-            width: 120px; /* PC Size */
-            height: 120px;
+            width: 110px;
+            height: 110px;
             background-color: var(--color-primary-purple);
             color: white;
             border-radius: 50%;
@@ -80,54 +80,50 @@
             text-align: center;
             cursor: pointer;
             z-index: 10;
-            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
             font-size: 0.85rem;
             font-weight: 600;
             line-height: 1.2;
-            padding: 15px;
+            padding: 10px;
             box-sizing: border-box;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
         }
 
         .small-circle.active {
             background-color: var(--color-dark-purple);
-            width: 140px;
-            height: 140px;
-            border: 3px solid white;
+            width: 130px;
+            height: 130px;
             box-shadow: 0 12px 24px rgba(0,0,0,0.3);
+            border: 3px solid white;
         }
 
-        /* --- MOBILE OPTIMISATION --- */
+        /* --- MOBILE REWRITE --- */
         @media (max-width: 768px) {
             .learning-activity-container {
-                width: 96vw;
-                height: 92vh;
-                min-height: 620px;
+                width: 95vw;
+                height: 90vh;
+                min-height: 550px;
             }
 
             .large-circle {
-                width: 260px !important; /* Smaller center to make room */
-                height: 260px !important;
-                padding: 25px;
+                width: 280px;
+                height: 280px;
+                padding: 30px;
             }
 
-            .large-circle h2 { font-size: 1.1rem !important; margin-bottom: 0.5rem; }
-            .large-circle p { font-size: 0.85rem !important; line-height: 1.4; }
+            .large-circle h2 { font-size: 1.1rem !important; }
+            .large-circle p { font-size: 0.85rem !important; }
 
             .small-circle {
-                width: 105px !important; /* Larger mobile circles to fit text */
-                height: 105px !important;
-                font-size: 0.75rem !important;
-                padding: 10px !important;
+                width: 85px !important; /* Force the size */
+                height: 85px !important;
+                font-size: 0.7rem !important;
+                padding: 5px !important;
             }
 
             .small-circle.active {
-                width: 115px !important;
-                height: 115px !important;
-            }
-
-            .top-instructions {
-                font-size: 0.9rem;
-                top: 15px;
+                width: 100px !important;
+                height: 100px !important;
             }
         }
     </style>
@@ -135,21 +131,19 @@
 <body>
 
 <div class="learning-activity-container">
-    <div class="top-instructions">Select a heading to explore support options</div>
-    
+    <div class="top-instructions">Select a circle to explore support</div>
     <div id="large-circle" class="large-circle">
-        <h2 id="title" class="text-xl font-bold text-[var(--color-primary-purple)]">Internal Support</h2>
-        <p id="text" class="text-gray-700">Workplaces have specific tools to help survivors stay safe and keep their jobs.</p>
+        <h2 id="title" class="text-xl font-bold mb-2 text-[var(--color-primary-purple)]">Internal Support</h2>
+        <p id="text" class="text-gray-700">Explore how your workplace can help colleagues stay safe.</p>
     </div>
-
     <div id="wrapper"></div>
 </div>
 
 <script>
-    const sections = [
-        { id: 'm', title: 'Supportive Managers', content: 'Managers can provide immediate practical support. They can arrange shift changes and secure priority parking.' },
-        { id: 'h', title: 'Human Resources', content: 'HR can guide staff through entitlements. All Australian employees have access to 10 days of paid domestic violence leave annually.' },
-        { id: 'e', title: 'Counselling (EAP)', content: 'The Employee Assistance Program (EAP) offers free, private, and professional counselling for all staff needing support.' }
+    const data = [
+        { id: 'm', title: 'Managers', content: 'Managers can arrange shift changes and secure priority parking for safety.' },
+        { id: 'h', title: 'HR Support', content: 'HR can facilitate the 10 days of paid domestic violence leave available to all Australians.' },
+        { id: 'e', title: 'EAP', content: 'The Employee Assistance Program offers free, private professional counselling.' }
     ];
 
     const wrapper = document.getElementById('wrapper');
@@ -157,31 +151,28 @@
     const textEl = document.getElementById('text');
     let activeId = null;
 
-    function updateLayout() {
+    function positionCircles() {
         const container = document.querySelector('.learning-activity-container');
         const isMobile = window.innerWidth <= 768;
         const centerX = container.offsetWidth / 2;
         const centerY = container.offsetHeight / 2;
         
-        const largeCircle = document.getElementById('large-circle');
-        const largeR = largeCircle.offsetWidth / 2;
+        // Dynamic math based on actual element size
+        const largeR = document.getElementById('large-circle').offsetWidth / 2;
+        const padding = isMobile ? 15 : 35;
 
-        sections.forEach((s, i) => {
-            const el = document.getElementById(s.id);
+        data.forEach((item, index) => {
+            const el = document.getElementById(item.id);
             const smallR = el.offsetWidth / 2;
-            
-            // INCREASED PADDING: Ensures they don't cover the white center
-            const padding = isMobile ? 35 : 45; 
             const orbit = largeR + smallR + padding;
-
+            
+            // Adjust angles for mobile so they don't hit the left/right wall
             let angle;
             if (isMobile) {
-                // Vertical spread: One at top, two at bottom-left/right
-                const mobileAngles = [90, 215, 325]; 
-                angle = mobileAngles[i];
+                const mobileAngles = [70, 180, 290]; // Spread vertically
+                angle = mobileAngles[index];
             } else {
-                // Desktop Arc
-                angle = 45 - (i * 45); 
+                angle = 45 - (index * 40); // Original desktop arc
             }
 
             const rad = angle * (Math.PI / 180);
@@ -193,26 +184,28 @@
         });
     }
 
-    // Build the circles
-    sections.forEach(s => {
-        const btn = document.createElement('div');
-        btn.id = s.id;
-        btn.className = 'small-circle';
-        btn.innerHTML = `<span>${s.title}</span>`;
-        btn.onclick = () => {
-            activeId = s.id;
-            titleEl.innerText = s.title;
-            textEl.innerText = s.content;
+    // Initialize
+    data.forEach(item => {
+        const div = document.createElement('div');
+        div.id = item.id;
+        div.className = 'small-circle';
+        div.innerHTML = `<span>${item.title}</span>`;
+        div.onclick = () => {
+            activeId = item.id;
+            titleEl.innerText = item.title;
+            textEl.innerText = item.content;
             document.querySelectorAll('.small-circle').forEach(c => c.classList.remove('active'));
-            btn.classList.add('active');
-            updateLayout();
+            div.classList.add('active');
+            positionCircles();
         };
-        wrapper.appendChild(btn);
+        wrapper.appendChild(div);
     });
 
-    // Handle Xen loading delay and resizing
-    window.onload = () => setTimeout(updateLayout, 150);
-    window.onresize = updateLayout;
+    // Run on load and resize
+    window.onload = () => {
+        setTimeout(positionCircles, 200); // The "Xen" delay
+    };
+    window.onresize = positionCircles;
 </script>
 
 </body>
