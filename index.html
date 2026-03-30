@@ -1,106 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Internal Support - Workplace Safety</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        :root {
-            --color-bg-purple: #C6B4D9;
-            --color-primary-purple: #513873;
-            --color-dark-purple: #413659;
-            --color-light-grey: #f6f5f8; 
-            --color-accent-purple: #9C7F9D;
-            --color-white: #FFFFFF;
-        }
-
-        body {
-            font-family: 'Helvetica', 'Arial', sans-serif;
-            background-color: var(--color-light-grey);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            /* Allow scrolling on mobile if needed */
-            overflow-x: hidden;
-            overflow-y: auto;
-        }
-
-        .learning-activity-container {
-            position: relative;
-            width: 800px; 
-            height: 650px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background-color: var(--color-bg-purple);
-            border-radius: 2rem;
-            box-shadow: 0 15px 35px rgba(65, 54, 89, 0.25);
-            transition: all 0.3s ease;
-        }
-
-        .top-instructions {
-            position: absolute;
-            top: 30px;
-            width: 100%;
-            text-align: center;
-            color: var(--color-primary-purple);
-            font-weight: 700;
-            font-size: 1.1rem;
-            padding: 0 20px;
-            z-index: 20;
-        }
-
-        .large-circle {
-            width: 440px;
-            height: 440px;
-            background-color: var(--color-white);
-            border-radius: 50%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 40px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-            transition: all 0.5s ease-in-out;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: var(--color-dark-purple);
-            line-height: 1.5;
-            box-sizing: border-box;
-            z-index: 1;
-            text-align: center;
-        }
-
-        .large-circle h2 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 0.75rem;
-            color: var(--color-primary-purple);
-        }
-
-        .large-circle p {
-            font-size: 1rem;
-            margin: 0;
-            word-wrap: break-word;
-        }
-
-        #small-circles-wrapper {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            pointer-events: none;
-            z-index: 10;
-        }
-
-        .small-circle {
+.small-circle {
             position: absolute;
             width: 100px;
             height: 100px;
@@ -114,183 +12,37 @@
             cursor: pointer;
             pointer-events: auto;
             box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
-            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1),
-                        width 0.3s ease, height 0.3s ease,
-                        background-color 0.3s ease, border 0.3s ease;
-            font-size: 0.8rem;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            
+            /* Text Fitting Fixes */
+            font-size: 0.85rem;
             font-weight: 600;
-            padding: 8px;
+            padding: 12px; /* Inner padding to keep text off the edges */
             box-sizing: border-box;
-            line-height: 1.2;
-            border: 2px solid transparent;
+            line-height: 1.1;
+            word-wrap: break-word;
+            hyphens: auto;
         }
 
-        .small-circle.active {
-            width: 120px;
-            height: 120px;
-            border: 4px solid var(--color-dark-purple);
-            background-color: var(--color-accent-purple);
-            color: white;
-            z-index: 15;
-            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4);
-        }
-
-        /* --- UPDATED MOBILE ADAPTATION --- */
+        /* --- MOBILE TEXT FITTING --- */
         @media (max-width: 850px) {
-            body { padding: 20px 0; }
-            
             .learning-activity-container {
-                width: 95vw;
-                height: 85vh; /* Use vh to ensure it fits mobile screens */
-                min-height: 600px;
+                width: 98vw;
+                height: 90vh;
             }
-            .top-instructions {
-                font-size: 0.95rem;
-                top: 15px;
-            }
-            .large-circle {
-                width: 65vw;
-                height: 65vw;
-                max-width: 320px;
-                max-height: 320px;
-                padding: 25px;
-            }
-            .large-circle h2 { font-size: 1.2rem; }
-            .large-circle p { font-size: 0.9rem; }
-            
             .small-circle {
-                width: 85px;
-                height: 85px;
-                font-size: 0.75rem;
+                width: 90px; /* Fixed minimum size so text actually fits */
+                height: 90px;
+                font-size: 0.7rem; /* Smaller font for mobile */
+                padding: 10px;
             }
             .small-circle.active {
-                width: 100px;
-                height: 100px;
+                width: 105px;
+                height: 105px;
+                font-size: 0.75rem;
+            }
+            .large-circle {
+                width: 60vw;
+                height: 60vw;
             }
         }
-    </style>
-</head>
-<body>
-
-    <div class="learning-activity-container">
-        <div class="top-instructions">
-            Select the satellite circles to explore support options.
-        </div>
-
-        <div id="large-circle" class="large-circle">
-            <div id="large-circle-content">
-                <h2 id="large-circle-title">Internal Support</h2>
-                <p id="large-circle-text">
-                    If a colleague shares that they are experiencing violence, your workplace has specific tools to help them stay safe and keep their job.
-                </p>
-            </div>
-        </div>
-
-        <div id="small-circles-wrapper"></div>
-    </div>
-
-    <script>
-        const sectionsData = [
-            {
-                id: 'managers',
-                title: 'Supportive Managers',
-                content: 'Managers can provide immediate practical support. They can arrange shift changes and secure priority parking.'
-            },
-            {
-                id: 'hr',
-                title: 'Human Resources',
-                content: 'HR can guide staff through entitlements. All Australian employees have access to 10 days of paid domestic violence leave annually.'
-            },
-            {
-                id: 'eap',
-                title: 'Counseling (EAP)',
-                content: 'Our Employee Assistance Program (EAP) offers free, private, and professional counselling for all staff members.'
-            }
-        ];
-
-        const largeCircleTitle = document.getElementById('large-circle-title');
-        const largeCircleText = document.getElementById('large-circle-text');
-        const wrapper = document.getElementById('small-circles-wrapper');
-        const container = document.querySelector('.learning-activity-container');
-
-        let activeCircleId = null;
-
-        function renderCircles() {
-            const isMobile = window.innerWidth <= 850;
-            const width = container.offsetWidth;
-            const height = container.offsetHeight;
-            const centerX = width / 2;
-            const centerY = height / 2;
-
-            // Base sizes for calculation
-            const largeR = document.getElementById('large-circle').offsetWidth / 2;
-            const smallR = isMobile ? 42.5 : 50; 
-            const padding = isMobile ? 15 : 30;
-            const orbitRadius = largeR + smallR + padding;
-
-            const activeIndex = sectionsData.findIndex(s => s.id === activeCircleId);
-
-            sectionsData.forEach((section, index) => {
-                const el = document.getElementById(`circle-${section.id}`);
-                const isActive = section.id === activeCircleId;
-                const currentRadius = el.offsetWidth / 2;
-                
-                let targetAngle;
-
-                if (isMobile) {
-                    // VERTICAL STACKING FOR MOBILE (Angles at top/bottom arcs)
-                    const mobileAngles = [90, 210, 330]; // Positioned to stay visible
-                    targetAngle = mobileAngles[index];
-                } else {
-                    // ORIGINAL ARC FOR PC
-                    const RIGHT_ARC_START = 45;
-                    const LEFT_ARC_START = 135;
-                    const STEP = 30;
-
-                    if (activeIndex === -1) {
-                        targetAngle = RIGHT_ARC_START - (index * STEP);
-                    } else if (index <= activeIndex) {
-                        targetAngle = LEFT_ARC_START + (index * STEP);
-                    } else {
-                        const relativeIndex = index - (activeIndex + 1);
-                        targetAngle = RIGHT_ARC_START - (relativeIndex * STEP);
-                    }
-                }
-
-                const rad = targetAngle * (Math.PI / 180);
-                const x = centerX + orbitRadius * Math.cos(rad) - currentRadius;
-                const y = centerY - orbitRadius * Math.sin(rad) - currentRadius;
-
-                el.style.transform = `translate(${x}px, ${y}px)`;
-
-                if (isActive) el.classList.add('active');
-                else el.classList.remove('active');
-            });
-        }
-
-        function handleCircleClick(id) {
-            if (activeCircleId === id) return;
-            activeCircleId = id;
-            const section = sectionsData.find(s => s.id === id);
-            largeCircleTitle.textContent = section.title;
-            largeCircleText.textContent = section.content;
-            renderCircles();
-        }
-
-        function init() {
-            sectionsData.forEach(section => {
-                const circle = document.createElement('div');
-                circle.id = `circle-${section.id}`;
-                circle.className = 'small-circle';
-                circle.textContent = section.title;
-                circle.addEventListener('click', () => handleCircleClick(section.id));
-                wrapper.appendChild(circle);
-            });
-            setTimeout(renderCircles, 50);
-            window.addEventListener('resize', renderCircles);
-        }
-
-        document.addEventListener('DOMContentLoaded', init);
-    </script>
-</body>
-</html>
