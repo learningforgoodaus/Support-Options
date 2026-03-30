@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Internal Support - Workplace Safety</title>
-    <!-- Tailwind CSS for utility classes -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* Using Helvetica as the primary font with standard fallbacks */
@@ -144,7 +143,7 @@
         @media (max-width: 850px) {
             .learning-activity-container {
                 width: 95vw;
-                height: 110vw; /* Increased height for mobile to fit top text */
+                height: 110vw; 
             }
             .top-instructions {
                 font-size: 0.9rem;
@@ -160,7 +159,7 @@
             .small-circle {
                 width: 16vw;
                 height: 16vw;
-                font-size: 0.6rem;
+                font-size: 0.65rem;
             }
             .small-circle.active {
                 width: 19vw;
@@ -172,12 +171,10 @@
 <body>
 
     <div class="learning-activity-container">
-        <!-- Persistent top instructions -->
         <div class="top-instructions">
             Select the satellite circles on the right to explore support options.
         </div>
 
-        <!-- Main Display -->
         <div id="large-circle" class="large-circle">
             <div id="large-circle-content">
                 <h2 id="large-circle-title">Internal Support</h2>
@@ -187,7 +184,6 @@
             </div>
         </div>
 
-        <!-- Wrapper for orbiting circles -->
         <div id="small-circles-wrapper"></div>
     </div>
 
@@ -195,16 +191,19 @@
         const sectionsData = [
             {
                 id: 'managers',
+                label: 'Managers',
                 title: 'Supportive Managers',
                 content: 'Managers can provide immediate practical support. They can arrange shift changes and secure priority parking.'
             },
             {
                 id: 'hr',
+                label: 'HR',
                 title: 'Human Resources',
                 content: 'HR can guide staff through entitlements. All Australian employees have access to 10 days of paid domestic violence leave annually to attend appointments or seek safety.'
             },
             {
                 id: 'eap',
+                label: 'EAP',
                 title: 'Counseling (EAP)',
                 content: 'Our Employee Assistance Program (EAP) offers free, private, and professional counselling for all staff members needing emotional or psychological support.'
             }
@@ -225,7 +224,7 @@
 
         const LEFT_ARC_START_ANGLE = 135; 
         const RIGHT_ARC_START_ANGLE = 45;  
-        const ANGLE_STEP = 30;            
+        const ANGLE_STEP = 30;             
 
         function getDynamicSizes() {
             const width = container.offsetWidth;
@@ -296,7 +295,7 @@
                 const circle = document.createElement('div');
                 circle.id = `circle-${section.id}`;
                 circle.className = 'small-circle';
-                circle.textContent = section.title;
+                circle.textContent = section.label; // Using the short label here
                 circle.addEventListener('click', () => handleCircleClick(section.id));
                 wrapper.appendChild(circle);
             });
@@ -308,5 +307,4 @@
         document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
-
 </html>
